@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    {{message}}
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        message: '你好'
+      },
+      methods: {},
+      beforeCreate () {
+        console.log('创建前')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      created() {
+        console.log('创建完毕')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      beforeMount() {
+        console.log('挂载前')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      mounted () {
+        console.log('挂载完毕')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      beforeUpdate () {
+        console.log('更新前')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      updated () {
+        console.log('更新完毕')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      beforeDestroy () {
+        console.log('销毁前')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+      destroyed() {
+        console.log('销毁完毕')
+        console.log('el:' + this.$el)
+        console.log('data:' + this.$data)
+        console.log('message:' + this.message)
+      },
+    })
+  </script>
+</body>
+</html>
