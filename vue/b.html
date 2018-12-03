@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <!-- 内容 BEGIN -->
+    <div id="main">
+        <!-- 按钮 BEGIN -->
+        <ul>
+            <li v-for="item in objArr" :key="item.id" v-if="!item.isSelect">
+                <button  v-on:click.stop="listClickFun(item.type,$event)">{{item.name}}</button>
+            </li>
+            <input v-on:keyup.enter="inputKeyUp">
+        </ul>
+        <!-- 按钮 END -->
+        <p>{{message}}</p>
+        <p>{{messageRever()}}</p>
+        <input v-model:value="inputValue" v-on:keyup.enter="inputKeyUp">
+        <input v-bind:value="inputValue1" v-on:keyup="inputKeyUp">
+        <span v-once>{{message}}</span>
+    </div>
+    <!-- 内容 END -->
+    <script src="./vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#main',
+            data: {
+                inputValue:'',
+                inputValue1:'vbind测试',
+                objArr: [{
+                    isSelect:false,
+                    name: '新增',
+                    type:'add'
+                }, {
+                    isSelect:false,
+                    name: '删除',
+                    type:'del'
+                }],
+                message: 'loveVue'
+            },
+            methods: {
+                inputKeyUp:function(){
+                    debugger;
+                },
+                /**
+                * 倒叙
+                */
+                messageRever: function () {
+                    return this.message.split('').reverse().join('');
+                },
+                /**
+                * 列表按钮点击事件
+                * @param {id} 按钮类型
+                * @param {event} 鼠标事件
+                * @returns
+                */
+                listClickFun: function (type,event) {
+                },
+                clickFun1: function (event) {
+                },
+                inputKeyUp: function (event) {
+                    var objArr = this.objArr;
+                    var length = objArr.length;
+                    for(var i = 0; i < length;i++){
+                        var current = objArr[i];
+
+                        if(current.type === this.inputValue){
+                            current.isSelect = true;
+                        }else{
+                           // current.isSelect = false;
+                        //    debugger;
+                            objArr.push({
+                                name:this.inputValue,
+                                type:this.inputValue, isSelect:false
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

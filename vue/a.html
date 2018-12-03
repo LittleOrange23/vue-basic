@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <button v-on:click="myClick($event)">点击</button>
+    <div v-for="(item,index) in myarr" :key="item.id">
+      <button @click="btnclick(item.id)">{{item.name}}</button>
+    </div>
+    <!-- 点击按钮实现字符翻转 -->
+    <button @click="reverseClick">点我翻转</button>
+    <span>{{message}}</span>
+    <!-- 遍历三个按钮，输出按钮的属性 -->
+    <div v-for="(item,index) in arry" :key="item.id" v-if="item.type!=='add'">
+      <button @click.stop="btnPrint(item)">{{item.name}}</button>
+    </div>
+    <!-- v-model 实现数据双向绑定 -->
+    <input type="text" v-model:value="inputValue">
+    <hr>
+    <!-- 一个输入框，三个按钮，当输入值===按钮的type，按钮不显示 -->
+    <input type="text" v-model:value="change">
+    <div v-for="(item,index) in arry" v-if="item.type!==change">
+      <button>{{item.name}}</button>
+    </div>
+    <!-- 在输入框enter时，才校验 -->
+    <input type="text" @keyup.enter="changeKey" v-model:value="change">
+    <div v-for="(item,index) in arry" v-if="item.isSelect!==true">
+      <button>{{item.name}}</button>
+    </div>
+    <!-- 当输入框enter时，如果一样，将按钮影藏，如果与type类型不相同时，添加一个按钮 -->
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        message: 'hello',
+        inputValue: 'nihao',
+        change:'',
+        arry: [{ isSelect:false, name: '增加', type: 'add' }, { isSelect:false, name: '删除', type: 'delete' }, { isSelect:false, name: '修改', type: 'update' }],
+        myarr: [{ name: 'a', id: '1' }, { name: 'b', id: '2' }]
+      },
+      methods: {
+        myClick: function (event) {
+          // alert('hh')
+          // debugger
+        },
+        btnclick: function (item) {
+          // debugger
+        },
+        reverseClick: function () {
+          //字符翻转
+          // console.log(this.message.split('').reverse().join(''))
+          this.message = this.message.split('').reverse().join('')
+        },
+        btnPrint: function (event) {
+          // 点击查看按钮属性 
+          console.log(event.type)
+        },
+        changeKey: function () {  
+          // debugger
+          // console.log(event)
+          var arry1 = this.arry
+          var length = arry1.length
+          var isSame = false
+          var obj = {}
+          for (var i = 0; i < length; i++) {
+            var current = arry1[i]
+
+            if (current.type===this.change) {
+              current.isSelect = true
+              isSame = true
+              break
+            }
+          }
+          if(!isSame){
+            var obj = {
+              name: this.change,
+              type:this.change,
+              isSelect: false
+            }
+            arry1.push(obj)
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

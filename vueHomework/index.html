@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue第一天作业</title>
+  <link rel="stylesheet" href="./lib/bootstrap.css">
+  <link rel="stylesheet" href="./lib/index.css">
+</head>
+
+<body>
+  <div id="app">
+    <h1>vue第一天作业</h1>
+    <!-- 实现字符的正序以及倒叙显示 -->
+    <input type="text" id="input" class="form-control" v-model:value="message" placeholder="请输入字符，并在下方显示">
+    <div class="showFonts">
+      <h2>正序：{{message}}</h2>
+      <h2>倒叙：{{messageReverse}}</h2>
+    </div>
+    <hr>
+    <!-- 按钮事件的处理 -->
+    <div>
+      <button type="button" class="btn btn-default" v-for="(item, index) in btnArr" :key="index" @click="btnClick(item.type)"
+        @mousemove="btnMouseMove(item.type)" @mouseout="btnMouseOut(item.type)">
+        {{item.name}}
+      </button>
+    </div>
+    <hr>
+    <!-- 渲染表格 -->
+    <!-- 输入框A后带一个搜索按钮，当点击搜索按钮的时候用输入的值过滤列表T的name,相同显示，不相同的列表就不显示 -->
+    <input type="text" id="input" class="form-control" placeholder="请输入关键字" 
+    v-model:value="keyWords" @keyup.enter="btnSearch(keyWords)">
+    <button type="button" class="btn btn-default" @click="btnSearch(keyWords)">搜索</button>
+    <table class="table table-bordered table-hover">
+      <tr>
+        
+        <td>姓名</td>
+        <td>年龄</td>
+        <td>性别</td>
+        <td>索引</td>
+      </tr>
+      <tr v-for="(item,index) in tabArr" :key="item.id" v-if="item.isSelect===true" 
+      @mousemove="trMouseMove(index)" @mouseout="trMouseOut(index)">
+        
+        <td>{{item.name}}</td>
+        <td>{{item.age}}</td>
+        <td>{{item.sex}}</td>
+        <td v-if="isShow===index">{{index}}</td>
+        <td v-else></td>
+      </tr>
+    </table>
+
+  </div>
+  <script src="./lib/vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        message: '',
+        isShow:null,
+        keyWords: '',
+        btnArr: [
+          { name: '按钮1', type: 'btn1' },
+          { name: '按钮2', type: 'btn2' },
+          { name: '按钮3', type: 'btn3' }
+        ],
+        tabArr: [
+          { isSelect: true, name: '成龙', age: '17', sex: "男" },
+          { isSelect: true, name: '小鱼儿', age: '27', sex: "男" },
+          { isSelect: true, name: '花无缺', age: '27', sex: "男" },
+          { isSelect: true, name: '赵云龙', age: '18', sex: "男" },
+          { isSelect: true, name: '赵丽颖', age: '18', sex: "女" }
+        ]
+      },
+      methods: {
+        // 点击按钮式，在控制台输出相关信息
+        btnClick: function (event) {
+          var name = this.btnClick.name.split(' ').slice(1)
+          console.log('您点击的按钮type为：' + event + '鼠标点击的事件名称为' + name)
+        },
+        // 鼠标移入按钮时，在控制台输出相关信息
+        btnMouseMove: function (event) {
+          var name = this.btnMouseMove.name.split(' ').slice(1)
+          console.log('您移动到的按钮type为：' + event + '鼠标移入的事件名称为' + name)
+        },
+        // 鼠标移除按钮时，在控制台输出相关信息
+        btnMouseOut: function (event) {
+          var name = this.btnMouseOut.name.split(' ').slice(1)
+          console.log('您移动到的按钮type为：' + event + '鼠标移出的事件名称为' + name)
+        },
+        // 搜索事件（点击搜索按钮以及键盘enter事件）
+        btnSearch: function (event) {
+          var arry = this.tabArr
+          var length = arry.length
+          for (var i = 0; i < length; i++) {
+            var current = arry[i]
+            if (current.name !== this.keyWords) {
+              current.isSelect = false
+            }
+            if(this.keyWords==='')
+            current.isSelect=true
+          }
+        },
+        // 鼠标移入表格时显示索引
+        trMouseMove: function (event) {
+          // console.log(event)  
+
+          this.isShow=event
+        },
+        // 鼠标移除表格时隐藏索引
+        trMouseOut: function (event) {  
+          this.isShow = !event
+        }
+
+      },
+      computed: {
+        // 翻转字符串
+        messageReverse: function () {
+          return this.message.split('').reverse().join('')
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

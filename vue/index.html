@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
+
 <body>
   <div id="app">
     {{message}}
+    <div v-for="(item,index) in title" :key="index">
+      <!-- id为1时加入索引 -->
+      <span v-if="item.id==='1'">{{ index + ' ' + item.name }}</span>
+      <!-- id为2时插入html -->
+      <span v-else-if="item.id==='2'" v-html="htmla"></span>
+      <!-- id为其他时直接打印名字 -->
+      <span v-else>{{ item.name }}</span>
+      <input type="text">
+    </div>
   </div>
   <script src="./vue.js"></script>
   <script>
     var vm = new Vue({
       el: '#app',
       data: {
-        message: '你好'
+        message: '你好',
+        htmla: "<span>hello</span>",
+        title: [{ id: '1', name: 'a' }, { id: '2', name: 'b' }, { id: '3', name: 'c' }]
       },
       methods: {},
-      beforeCreate () {
+      beforeCreate() {
         console.log('创建前')
         console.log('el:' + this.$el)
         console.log('data:' + this.$data)
@@ -36,25 +49,25 @@
         console.log('data:' + this.$data)
         console.log('message:' + this.message)
       },
-      mounted () {
+      mounted() {
         console.log('挂载完毕')
         console.log('el:' + this.$el)
         console.log('data:' + this.$data)
         console.log('message:' + this.message)
       },
-      beforeUpdate () {
+      beforeUpdate() {
         console.log('更新前')
         console.log('el:' + this.$el)
         console.log('data:' + this.$data)
         console.log('message:' + this.message)
       },
-      updated () {
+      updated() {
         console.log('更新完毕')
         console.log('el:' + this.$el)
         console.log('data:' + this.$data)
         console.log('message:' + this.message)
       },
-      beforeDestroy () {
+      beforeDestroy() {
         console.log('销毁前')
         console.log('el:' + this.$el)
         console.log('data:' + this.$data)
@@ -69,4 +82,5 @@
     })
   </script>
 </body>
+
 </html>
