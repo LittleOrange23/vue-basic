@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .myprice{
+      border: 1px solid red;
+    }
+    .goods {
+      background: #eb87d5;
+    }
+    .goodFont{
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <span :style="{color:myColor}">你好</span>
+    <h1 :style="{color:'pink'}">hahha</h1>
+    <hr>
+    <div>
+      <!-- <span>单价</span><input type="text" v-model="price">
+      <span>数量</span><input type="text" v-model="number">
+      <span>总价:{{total}}</span> -->
+    </div>
+    <hr>
+    <div>
+      <!-- 当输入的值不是数字时，input边框的值为红色 -->
+      <!-- <span>单价</span><input type="text" v-model:value="price" @keyup="noNumber" :class="{myprice:flag}"> -->
+      <span>单价</span><input type="text" v-model="price" :class="{myprice:flag}">
+      <span>数量</span><input type="text" v-model="num"><button @click="total1">确定</button>
+      <span>总价:{{sum}}</span>
+    </div>
+    <hr>
+    <!-- 渲染商品表格：商品名，标价，数量 -->
+    <ul>
+      <!-- <li v-for="(item,index) in goods" @click="getData(index)" @mousemove="changeBack(index,true)" @mouseout="changeBack(index,false)" :class="{goods:item.isChange,goodFont:item.isChange}"> -->
+      <li v-for="(item,index) in goods" @click="getData(index,item)" :class="{goodFont:item.isFont}">
+        <div class="list">
+          <span>{{item.name}}</span>
+          <span>{{item.price}}</span>
+          <span>{{item.number}}</span>
+        </div>
+      </li>
+      <button v-if="btnShow" v-for="(btnArry, ind) in arry" :key="ind" @click="btnClick(btnArry.type)">{{btnArry.name}}</button>
+    </ul>
+    <hr>
+    <!-- 点击对应的radio按钮，显示隐藏上面的button -->
+    <input type="radio" value="show" name="a" v-model="isShow">
+    <label for="show">显示</label>
+    <input type="radio" value="hidden" name="a" v-model="isShow">
+    <label for="hidden">隐藏</label>
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        myColor: 'red',
+        price: 0,
+        num: 0,
+        sum: 0,
+        flag: false,
+        isShow: 'show',
+        goods: [
+          { isChecked: false, isFont: false, isChange: false, name: '苹果', price: '20', number: '3' },
+          { isChecked: false, isFont: false, isChange: false, name: '梨子', price: '30', number: '6' },
+          { isChecked: false, isFont: false, isChange: false, name: '香蕉', price: '22', number: '4' }],
+        arry: [
+          { name: '增加', type: 'add' },
+          { name: '删除', type: 'delete' },
+          { name: '修改', type: 'update' }
+        ],
+        chooseid: null,
+        indexSave: []
+      },
+      methods: {
+        total1() {
+          if (isNaN(Number(this.price))) {
+            this.flag = true
+            this.sum = '警告：请输入数字'
+          }
+          else
+            this.sum = this.price * this.num
+        },
+        // 判断是否输入的是数字
+        noNumber() {
+          if (typeof (this.price) !== 'number') {
+            this.flag = true
+          }
+        },
+        //鼠标移入移出时改变背景颜色
+        changeBack(index, flag) {
+          this.goods[index].isChange = flag
+        },
+        // 点击li 
+        getData(index, item) {
+          this.price = this.goods[index].price
+          this.num = this.goods[index].number
+          // 单击显示样式
+          // var myArray = this.goods
+          // for (var i = 0; i < myArray.length; i++) {
+          //   myArray[i].isFont = false
+          // }
+          this.goods[index].isFont = !this.goods[index].isFont
+          this.chooseid = index
+          item.isChecked = true
+          // this.indexSave.push(index)
+          // console.log(this.indexSave)
+          console.log(item)
+
+        },
+        btnClick(type) {
+          if (type == 'delete') {
+            // console.log(this.chooseid)
+            // if (this.chooseid==null) {
+
+            // }
+            // else if (this.chooseid >= 0) {
+            //   // this.goods.splice(this.chooseid, 1)
+            //   this.chooseid = null
+            // }
+            for (var i = this.goods.length - 1; i >= 0; i--) {
+              console.log(this.goods[i].isChecked)
+              if (this.goods[i].isChecked == true) {
+                this.goods.splice(i, 1)
+              }
+            }
+          }
+          else if (type == 'update') {
+            console.log(type)
+            this.goods[this.chooseid].price = this.price
+            this.goods[this.chooseid].number = this.num
+            // console.log(this.price+"  "+ this.num)
+            // console.log(this.goods.price+"  "+this.goods.num)
+          }
+        }
+      },
+      computed: {
+        total() {
+          this.sum = this.price * this.number
+
+        },
+        btnShow() {
+          return this.isShow === 'show' ? true : false
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

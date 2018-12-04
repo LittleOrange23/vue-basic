@@ -104,14 +104,14 @@
           }
         },
         // 鼠标移入表格时显示索引
-        trMouseMove: function (event) {
+        trMouseMove: function (index) {
           // console.log(event)  
 
-          this.isShow=event
+          this.isShow=index
         },
         // 鼠标移除表格时隐藏索引
-        trMouseOut: function (event) {  
-          this.isShow = !event
+        trMouseOut: function (index) {  
+          this.isShow = !index
         }
 
       },

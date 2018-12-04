@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>第二天</title>
+  <style>
+    .test1 {
+      width: 100px;
+      height: 100px;
+      background: red;
+    }
+
+    .test2 {
+      border: 1px solid black;
+    }
+
+    .li1 {
+      color: red;
+    }
+
+    .li2 {
+      color: yellowgreen;
+    }
+
+    .li3 {
+      color: #5860e2;
+    }
+
+    .active {
+      background: #5860e2;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="test1" :class="{test1:true, test2: true}">
+    </div>
+    <!-- 新建三行ul列表，给每一行绑定不同的类名 -->
+    <ul>
+      <li v-for="(item,index) in arry" :class="item.class1">{{item.name}}</li>
+    </ul>
+    <!-- 如果为第一个li则将其添加一个test1类 -->
+    <ul>
+      <li v-for="(item,index) in arry" :class="index===0?'test1':''">{{item.name}}</li>
+    </ul>
+    <!-- 鼠标移入时，加入active类名 -->
+    <!-- <ul>
+      <li v-for="(item,index) in arry" :class="{active:item.isSelect}" @mousemove="liMouseMove(index,true)" @mouseout="liMouseOut(index,false)">{{item.name}}</li>
+    </ul> -->
+    <!-- 每一行有增删改三个按钮，点击编辑按钮将span字体颜色变为红色，删除时，打印当前li的索引号 -->
+    <ul>
+      <li v-for="(item,index) in arry">
+        <span :class="{li1:item.isSelect}">{{item.name}}</span>
+        <button v-for="(item1,index1) in item.button1" @click="btnClick(item1.type,index)">{{item1.name}}</button>
+      </li>
+    </ul>
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        isActive: true,
+        arry: [{
+          id: '1',
+          name: '第一',
+          class1: 'li1',
+          isSelect: false,
+          button1: [
+            { name: '增加', type: 'add' },
+            { name: '删除', type: 'delete' },
+            { name: '修改', type: 'update' }]
+        },
+        {
+          id: '2',
+          name: '第二',
+          class1: 'li2',
+          isSelect: false,
+          button1: [
+            { name: '增加', type: 'add' },
+            { name: '删除', type: 'delete' },
+            { name: '修改', type: 'update' }
+          ]
+        },
+        {
+          id: '3',
+          name: '第三',
+          class1: 'li3',
+          isSelect: false,
+          button1: [
+            { name: '增加', type: 'add' },
+            { name: '删除', type: 'delete' },
+            { name: '修改', type: 'update' }
+          ]
+        }
+        ],
+        // activeClass:'test1'
+      },
+      methods: {
+        // 鼠标移入事件封装
+        mouseEvent(index, flag) {
+          this.arry[index].isSelect = flag
+        },
+        liMouseMove(index) {
+          // console.log(index)
+          this.arry[index].isSelect = true
+        },
+        liMouseOut(index) {
+          this.arry[index].isSelect = false
+        },
+        //鼠标点击按钮事件
+        btnClick(type, index) {
+          // console.log(type)
+          if (type === 'update') {
+            this.arry[index].isSelect = !this.arry[index].isSelect
+          }
+          if(type==='delete'){
+            console.log(this.arry[index].id)
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
