@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .product {
+      background: #e5e5e5;
+    }
+    .product li {
+      list-style: none;
+    }
+    .fontColor{
+      color: red;
+    }
+  </style>
+</head>
+<!-- 定义一个组件myinput,组件内容有用户名与密码输入框 -->
+<!-- 商品列表组件 -->
+
+<body>
+  <div id="app">
+    <h2>第一个实例</h2>
+    <h3>父传子：</h3>
+    <com1 v-bind:message="propsValue"></com1>
+    <hr>
+    <message></message>
+    <message-a></message-a>
+    <input-reverse></input-reverse>
+    <my-input :inputvalue="faValue"></my-input>
+  </div>
+  <div id="two">
+    <hr>
+    <h2>第二个实例</h2>
+    <message-b></message-b>
+    <goods-list v-for="item in goodsArr" :key="item.id" :goods-info="item" @transport="goodsClick"></goods-list>
+    <button @click="amount">结账</button>
+    <span>总价：{{totalInput}}</span>
+    <span>商品名：{{productsName}}</span>
+  </div>
+
+  <template id="temp1">
+    <h1>这是第三种注册组件的方法</h1>
+  </template>
+  <template id="temp2">
+    <div class="myinput">
+      用户名：<input type="text" :value="inputvalue">
+      密码：<input type="text" :value="inputvalue">
+    </div>
+  </template>
+  <!-- 渲染商品列表组件 -->
+  <template id="goodsTemp">
+    <!-- <div>
+      <ul class="product">
+        <h2>货架</h2>
+        <div v-for="(item,index) in pro">
+          <span>{{item.title}}</span>
+          <li v-for="(item1,index1) in item.proInfo" :class="{fontColor:item1.isSelect}" :key="item1.id" @click="show(index1,item1)">{{item1.name}}</li>
+          <hr>
+        </div>
+        <button @click="total">合计</button>
+        <button @click="sendMsToParent">子传父</button>
+        <span>{{sum1}}</span>
+      </ul>
+
+    </div> -->
+    <div>
+      <span>{{pro.title}}</span>
+      <ul>
+        <li v-for="(item,index) in pro.proInfo">
+          <span>{{item.name}}</span>
+          <span>{{item.price}}</span>
+        </li>
+      </ul>
+      <h2>skjhfdkjds</h2>
+    </div>
+  </template>
+  <template id="goods">
+    <div class="product">
+      <span>{{goodsInfo.title}}</span>
+      <ul class="">
+        <li v-for="item in goodsInfo.goodsList" :key="item.id" v-bind:class="{fontColor:item.isSelect}" @click="proClick(item)">
+          <span>{{item.name}}</span>
+          <span>{{item.price}}</span>
+        </li>
+      </ul>
+    </div>
+  </template>
+  <template id="showNameTemp">
+    <ul>
+      <li v-for="(item,index) in items"></li>
+    </ul>
+  </template>
+  <script src="./vue.js"></script>
+  <script>
+    // 全局组件
+    Vue.component('com1', {
+      data() {
+        return {
+          // message: '123',
+          a: '0'
+        }
+      },
+      props: ['message'],
+      methods: {
+        add() {
+          this.a = parseInt(this.a) + 1
+        }
+      },
+      template: '<div><button @click="add">{{a}}</button><h2>{{message}}</h2></div>'
+    })
+    Vue.component('message', {
+      data() {
+        return {
+        }
+      },
+      template: '#temp1'
+    })
+    Vue.component('my-input', {
+      data() {
+        return {
+        }
+      },
+      props: ['inputvalue'],
+      template: '#temp2'
+    })
+    Vue.component('goods-list', {
+      data: function () {
+        return {
+
+        }
+      },
+      props: ['goodsInfo'],
+      template: "#goods",
+      methods: {
+        proClick: function (item) {
+          item.isSelect = !item.isSelect;
+          // debugger
+          this.$emit('transport', item);
+          // debugger
+        }
+      }
+    });
+    Vue.component('goods', {
+      data() {
+        return {
+          myPrice: [],
+          // sum: 0
+        }
+      },
+      props: ['pro', 'sum1'],
+      template: '#goodsTemp',
+      methods: {
+        sendMsToParent() {
+          this.$emit('listentochildevent', 'this message is from child')
+        },
+        show(index, item) {
+          console.log(index)
+          console.log(item)
+          item.isSelect = true
+          this.myPrice.push(item.price)
+          console.log(this.myPrice)
+          // console.log(this.pro)
+          // this.pro.proInfo[index].isSelect = true
+
+        },
+        total() {
+          this.$emit('childevent', this.myPrice)
+
+        }
+      }
+    })
+
+    Vue.component('show-name', {
+      data() {
+        return {
+
+        }
+      },
+      template: '#showNameTemp'
+    })
+    // 局部组件
+    var messageA = {
+      data() {
+        return {
+
+        }
+      },
+      template: '<h1>你好messageA组件</h1>'
+    }
+    var messageB = {
+      data() {
+        return {
+          message: '123',
+          b: '0'
+        }
+      },
+      methods: {
+        add() {
+          this.b = parseInt(this.b) + 1
+        }
+      },
+      template: '<button @click="add">{{b}}</button>'
+    }
+
+    var inputReverse = {
+      data() {
+        return {
+          fonts: ''
+        }
+      },
+      methods: {
+        reverseText() {
+          return this.fonts.split('').reverse().join('')
+        }
+      },
+      template: "<div><input type='text' v-model='fonts'><span>{{reverseText()}}</span></div>"
+    }
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        propsValue: '父传子的数据',
+        faValue: '你好'
+      },
+      methods: {},
+      components: {
+        "message-a": messageA,
+        "input-reverse": inputReverse
+      }
+    })
+    var vm1 = new Vue({
+      el: '#two',
+      data: {
+        goodsArr: [{
+          title: '水果',
+          type: 'fruit',
+          goodsList: [{
+            name: "苹果",
+            price: 22,
+            isSelect: false
+          }, {
+            name: "香蕉",
+            price: 3,
+            isSelect: false
+          }, {
+            name: "葡萄",
+            price: 23,
+            isSelect: false
+          }]
+        }, {
+          title: '书籍',
+          type: 'book',
+          goodsList: [{
+            name: "活着",
+            price: 12,
+            isSelect: false
+          }, {
+            name: "灵魂摆渡",
+            price: 12,
+            isSelect: false
+          }, {
+            name: "1984",
+            price: 12,
+            isSelect: false
+          }]
+        }],
+        parentMsg: 'hello,child',
+        sum1: 0,
+        parentArry: [],
+        totalInput: "",
+        productsName: "",
+        selectProducts:[]
+      },
+      methods: {
+        showMsgFromChild(data) {
+          console.log(data)
+        },
+        goodsClick(item) {
+          this.selectProducts.push(item);
+        },
+        amount: function () {
+          //计算总价，展示选中的name
+          // this.totalInput="test";
+          var temptotal = 0;
+          var tempname = '';
+          for (var i = 0; i < this.selectProducts.length; i++) {
+            temptotal += this.selectProducts[i].price;
+            tempname += this.selectProducts[i].name;
+          }
+          this.totalInput = temptotal;
+          this.productsName = tempname
+        },
+      },
+      components: {
+        'message-b': messageB
+      }
+    })
+  </script>
+</body>
+
+</html>

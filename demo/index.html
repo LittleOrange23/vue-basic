@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./lib/fonts/iconfont.css">
+	<link rel="stylesheet" href="./lib/index.css">
+
+	<script type="text/javascript" src="./lib/vue.js"></script>
+	<style>
+		.show{
+			display: none
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<!-- 头部开始 -->
+		<header class="app-header">
+			<h1>To Do List</h1>
+		</header>
+		<!-- 头部结束 -->
+		<div class="task"><span>添加任务</span> <input class="taskinfo" type="text" placeholder="请输入任务，并按enter键确定" v-model="newValue"
+			 name="" id="" @keyup.enter="addall"></div>
+
+		<ul class="tablist">
+			<li name="" value="first" @click="changeCutterView('first')"><a href="javascript:;">所有任务</a></li>
+			<li name="" value="second" @click="changeCutterView('second')"><a href="javascript:;">已完成任务</a></li>
+			<li name="" value="third" @click="changeCutterView('third')"><a href="javascript:;">未完成任务</a></li>
+		</ul>
+
+		<first :addfinish="addfinish" :filterunfinish="filterunfinish" :all="all" :finish="finish" :unfinish="unfinish" :is="cutterView"
+		 ref="child"></first>
+		<!-- 底部开始 -->
+		<footer class="app-footer">
+			<address>&copy;xuyazhen</address>
+
+		</footer>
+		<!-- 底部结束 -->
+	</div>
+	<!-- 所有任务组件 -->
+	<template id="first">
+		<!-- <h1>first</h1> -->
+		<ul class="tabinfo">
+			<li v-for="(item,index) in all" :key="item.id">{{ item.value }}
+				<a href="javascript:;" :class="{show:item.isFinish}"><span class="iconfont icon-shoujiduihao" @click="finishSubmit(item,index)"></span></a>
+				<a href="javascript:;"><span class="iconfont icon-delete1" @click="deleteSubmit(item,index)"></span></a>
+			</li>
+		</ul>
+
+	</template>
+	<!-- 已完成任务组件 -->
+	<template id="second">
+		<ul class="tabinfo">
+			<li v-for="item in finish"> {{ item.value }}
+				<a href="javascript:;"><span class="iconfont icon-delete1" @click="deleteSubmit(item,index)"></span></a>
+			</li>
+		</ul>
+	</template>
+	<!-- 未完成任务组件 -->
+	<template id="third">
+		<ul class="tabinfo">
+			<li v-for="(item,index) in unfinish"> {{ item.value }}
+				<a href="javascript:;" :class="{show:item.isFinish}"><span class="iconfont icon-shoujiduihao" @click="finishSubmit(item,index)"></span></a>
+				<a href="javascript:;"><span class="iconfont icon-delete1" @click="deleteSubmit(item,index)"></span></a>
+			</li>
+		</ul>
+	</template>
+
+
+	<script type="text/javascript">
+	// 注册组件
+		Vue.component('first', {
+			name: 'first',
+			data() {
+				return {
+					// all: this.all
+				}
+			},
+			props: {
+				all: {
+					type: Array
+				},
+				unfinish: {
+					type: Array
+				},
+				addfinish: {
+					type: Function
+				},
+				filterunfinish: {
+					type: Function
+				}
+			},
+			methods: {
+				// addall(temp) {
+				// 	console.log(temp)
+				// 	this.all.unshift(temp) // 这里可以直接操作 props中的值
+				// },
+				finishSubmit(item, index) {
+					if (this.addfinish) {
+						this.addfinish(item)
+
+					}
+
+					console.log(this.unfinish)
+					// this.all.splice(index, 1)
+					this.all[index].isFinish = true
+					let newAll = this.all
+					this.filterunfinish(newAll.splice(index,1))
+					// console.log(newAll.splice(index,1))
+				},
+				deleteSubmit(item, index) {
+					this.all.splice(index, 1)
+				}
+			},
+			template: '#first'
+		})
+		Vue.component('second', {
+			name: 'second',
+
+			data() {
+				return {
+					finish1: this.finish
+				}
+			},
+			props: {
+				finish: {
+					type: Array
+				}
+			},
+			methods: {
+				// addfinish(temp) {
+				// 	this.finish.unshift(temp)
+				// },
+				deleteSubmit(item, index) {
+					this.finish1.splice(index, 1)
+				}
+			},
+			template: '#second'
+		})
+		Vue.component('third', {
+			name: 'third',
+
+			data() {
+				return {
+					unfinish1: this.unfinish
+				}
+			},
+			props: {
+				unfinish: {
+					type: Array
+				},
+				addfinish: {
+					type: Function
+				}
+			},
+			methods: {
+				finishSubmit(item, index) {
+					if (this.addfinish) {
+						this.addfinish(item)
+
+					}
+					// this.all.splice(index, 1)
+					this.unfinish[index].isFinish = true
+
+				},
+				deleteSubmit(item, index) {
+					this.unfinish1.splice(index, 1)
+				}
+			},
+			template: '#third'
+		})
+	
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				all: [
+					{
+						value: '完成一个亿小目标',
+						time: new Date().getTime(),
+						isFinish: false
+					},
+					{
+						value: '活到老学到老',
+						time: new Date().getTime(),
+						isFinish: false
+					}],
+				finish: [{
+					value: '已经完成一',
+					time: new Date().getTime(),
+					isFinish: false
+				}],
+				unfinish: [{
+					value: '未完成一',
+					time: new Date().getTime(),
+					isFinish: false
+				}],
+				cutterView: 'first',
+				newValue: '',
+				isFinish: false
+			},
+			methods: {
+				// 切换组件
+				changeCutterView(view) {
+					this.cutterView = view
+				},
+				// 添加任务
+				addall() {
+					let temp = {}
+					temp.value = this.newValue
+					temp.time = new Date().getTime()
+					temp.isFinish = false
+					this.all.unshift(temp)
+					// this.$refs.child.addall(temp)
+					this.newValue = ''
+				},
+				addfinish(temp) {
+					// alert('子组件调用我了 我把它传过来的数据放到finish 中')
+					console.log(temp);
+					this.finish.unshift(temp)
+				},
+				filterunfinish(temp){
+					this.unfinish = temp
+				}
+				// bus(item) {
+				// 	this.$refs.child.addfinish(item)
+				// }
+
+			}
+
+		})
+	</script>
+
+</body>
+
+</html>

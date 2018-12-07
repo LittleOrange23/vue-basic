@@ -1,0 +1,81 @@
+body{
+  margin: 0
+}
+/* 头部 */
+.app-header{
+  height: 50px;
+  background: #fae16b;
+}
+.app-header h1{
+ margin: 0;
+ text-align: center;
+ color: #969696;
+}
+/* 底部 */
+.app-footer {
+  margin-top: 20px;
+  height: 100px;
+  color: #fff;
+  background: #000000
+}
+.app-footer address{
+  text-align: center;
+  line-height: 100px;
+  font-style: normal
+}
+
+.task {
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 30px;
+
+  color: #969696;
+}
+.taskinfo {
+  width: 200px;
+  height: 35px;
+  border-radius: 5px;
+  border: 1px solid #e8c006;
+}
+.tablist {
+  width: 500px;
+  height: 40px;
+  margin: 0 auto;
+  margin-top: 10px;
+  /* background: #fae16b; */
+}
+.tablist li{
+  float: left;
+  list-style: none;
+  line-height: 40px;
+  background: #fae16b;
+  color: #969696;
+  width: 100px;
+  margin: 0;
+  display: block;
+}
+.tabinfo {
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 500px;
+}
+.tabinfo ul {
+  margin: 0;
+  padding: 0
+}
+.tabinfo li{
+  height: 50px;
+  border-bottom: 1px solid #e8c006;
+  list-style: none;
+  line-height: 50px;
+}
+.changeback {
+  background: #3a321b !important
+}
+a:link{
+  text-decoration: none;
+  color: #969696;
+}
+/* a:hover {
+
+} */
